@@ -1,61 +1,54 @@
-import { Component } from 'react';
+import React, { useState } from 'react';
 import { nanoid } from 'nanoid';
 import cssform from '../ContactForm/ContactForm.module.css';
 
-export class ContactForm extends Component {
-  state = {
-    name: '',
-    number: '',
-  };
+export const ContactForm = ({ addContact }) => {
+    const [name, setName] = useState('');
+    const [number, setNumber] = useState('');
+  
 
-  handleInputChange = event => {
-    const { name, value } = event.target;
-    this.setState({ [name]: value });
-  };
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        name === 'name' ? setName(value) : setNumber(value);
+    };
 
-  handleFormSubmit = event => {
-    event.preventDefault();
-
-    const { name, number } = this.state;
-    const { addContact } = this.props;
-
-    addContact({ id: nanoid(), name, number });
-    this.setState({ name: '', number: '' });
-  };
-
-  render() {
-    const { name, number } = this.state;
+    const handleFormSubmit = (event) => {
+        event.preventDefault();
+      
+        addContact({ id: nanoid(), name, number });
+        setName('');
+        setNumber('');
+    };
 
     return (
-      <section className={cssform.form}>
-        <h1 className={cssform.form__title}>Phonebook</h1>
-        <form className={cssform.form__container} onSubmit={this.handleFormSubmit}>
-          <label className={cssform.form__label}>Name</label>
-          <input
-            name="name"
-            type="text"
-            className={cssform.form__input}
-            placeholder="Enter name"
-            required
-            value={name}
-            onChange={this.handleInputChange}
+        <section className={cssform.form}>
+            <h1 className={cssform.form__title}>Phonebook</h1>
+            <form className={cssform.form__container} onSubmit={handleFormSubmit}>
+                <label className={cssform.form__label}>Name</label>
+                <input
+                    name="name"
+                    type="text"
+                    className={cssform.form__input}
+                    placeholder="Enter name"
+                    required
+                    value={name}
+                    onChange={handleInputChange}
             
-          />
-          <label className={cssform.form__label}>Number</label>
-          <input
-            name="number"
-            type="tel"
-            className={cssform.form__input}
-            placeholder="Enter phone number"
-            required
-            value={number}
-            onChange={this.handleInputChange}
-          />
-          <button className={cssform.form__btn} type="submit">
-            Add contact
-          </button>
-        </form>
-      </section>
+                />
+                <label className={cssform.form__label}>Number</label>
+                <input
+                    name="number"
+                    type="tel"
+                    className={cssform.form__input}
+                    placeholder="Enter phone number"
+                    required
+                    value={number}
+                    onChange={handleInputChange}
+                />
+                <button className={cssform.form__btn} type="submit">
+                    Add contact
+                </button>
+            </form>
+        </section>
     );
-  }
-}
+};
